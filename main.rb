@@ -28,29 +28,65 @@ class Soduko
   end
 
   def validate
-    @matrix.each do |row|
-      print change_number(row)
+    @matrix.each_with_index do |row, idx|
+      @matrix[idx] = change_number(row)
     end
+    @matrix
   end
 
   def change_number(row)
-    # row.map! do |_current|
-    #   new_number = rand(1..9)
+    while row
+      random_num = rand(1..9)
 
-    #   new_number = rand(1..9) while row.include?(new_number)
-    #   new_number
-    # end
-    # row
-    # count = 0
-    row.each_with_index do |number, idx|
-      f = rand(1..9) if number == row[idx + 1]
-      row[idx] = f
+      row.uniq
+
+      break if row.uniq.length == 9
+
+      row << random_num unless row.include?(random_num)
+      # sleep(1)
     end
-    row
+    row.uniq
+  end
+
+  # def check_vertical_no_duplicates
+  #   column = []
+  #   count = 0
+  #   9.times do |idx|
+  #     # print idx
+  #     print count
+  #     column << @matrix[idx][count]
+  #     count += 1
+  #   end
+  #   print column
+  # end
+  def check_vertical_no_duplicates
+    result = []
+
+    9.times do |column_index|
+      column = []
+
+      @matrix.each do |row|
+        column << row[column_index]
+      end
+
+      result << column
+    end
+
+    result.each do |column|
+      print "#{column}\n"
+    end
   end
 end
 
 a = Soduko.new(9, 9)
 a.fill_matrix
-a.display
+# a.display
+# a.validate
+# puts ''
 a.validate
+
+a.display
+a.check_vertical_no_duplicates
+# a.display
+
+# print a.change_number([2, 3, 4, 2, 3, 8, 6, 3, 5, 3])
